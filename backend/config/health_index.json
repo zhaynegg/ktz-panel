@@ -1,0 +1,64 @@
+{
+  "thresholds": {
+    "good_min": 75.0,
+    "warning_min": 45.0
+  },
+  "parameters": {
+    "engine_temp_c": {
+      "weight": 0.2,
+      "ideal": 55.0,
+      "warn": 85.0,
+      "crit": 100.0,
+      "higher_is_worse": true
+    },
+    "transformer_temp_c": {
+      "weight": 0.15,
+      "ideal": 50.0,
+      "warn": 80.0,
+      "crit": 95.0,
+      "higher_is_worse": true
+    },
+    "brake_pipe_pressure_bar": {
+      "weight": 0.2,
+      "ideal": 5.0,
+      "warn": 4.3,
+      "crit": 3.5,
+      "higher_is_worse": false
+    },
+    "vibration_mm_s": {
+      "weight": 0.15,
+      "ideal": 0.4,
+      "warn": 1.8,
+      "crit": 2.8,
+      "higher_is_worse": true
+    },
+    "speed_kmh": {
+      "weight": 0.05,
+      "ideal": 60.0,
+      "warn": 80.0,
+      "crit": 88.0,
+      "higher_is_worse": true
+    },
+    "current_a": {
+      "weight": 0.1,
+      "ideal": 300.0,
+      "warn": 700.0,
+      "crit": 900.0,
+      "higher_is_worse": true
+    },
+    "fuel_level_pct": {
+      "weight": 0.1,
+      "ideal": 90.0,
+      "warn": 20.0,
+      "crit": 5.0,
+      "higher_is_worse": false
+    },
+    "voltage_v": {
+      "weight": 0.05,
+      "ideal": 24750.0,
+      "warn": 24200.0,
+      "crit": 23900.0,
+      "higher_is_worse": false
+    }
+  }
+}
