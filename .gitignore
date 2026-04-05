@@ -12,12 +12,14 @@ backend/__pycache__
 backend/**/__pycache__
 backend/data/*.sqlite3
 backend/data/*.db
+backend/env.local
 *.pyc
 
 # Frontend
 frontend/.next
 frontend/out
 frontend/node_modules
+frontend/env.local
 
 # Scripts output
 scripts/output/*.png

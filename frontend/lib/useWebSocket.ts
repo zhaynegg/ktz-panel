@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { StreamFrame } from "./api";
-import { fetchHistory, wsBase } from "./api";
+import { fetchHistory, wsTelemetryUrl } from "./api";
 
 const MAX_HISTORY = 1800;
 const RECONNECT_DELAY_MS = 2000;
@@ -18,7 +18,7 @@ export function useTelemetryStream(enabled = true) {
     if (!enabled) return;
     if (wsRef.current?.readyState === WebSocket.OPEN) return;
 
-    const ws = new WebSocket(`${wsBase()}/ws/telemetry`);
+    const ws = new WebSocket(wsTelemetryUrl());
     wsRef.current = ws;
 
     ws.onopen = () => setConnected(true);

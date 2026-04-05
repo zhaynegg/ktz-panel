@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { login, type UserInfo } from "@/lib/api";
+import { login, signUp, type UserInfo } from "@/lib/api";
 
 type LoginScreenProps = {
   error: string | null;
@@ -18,8 +18,9 @@ export function LoginScreen({
   onError,
   onToggleTheme,
 }: LoginScreenProps) {
-  const [username, setUsername] = useState("admin");
-  const [password, setPassword] = useState("admin123");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [mode, setMode] = useState<"login" | "signup">("login");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -28,10 +29,20 @@ export function LoginScreen({
     onError(null);
 
     try {
-      const user = await login(username, password);
-      onLogin(user);
+      if (mode === "signup") {
+        const result = await signUp(username, password);
+        if (result.needsEmailConfirm) {
+          onError("Учётка создана. Подтверди email в письме и затем войди.");
+        } else {
+          const user = await login(username, password);
+          onLogin(user);
+        }
+      } else {
+        const user = await login(username, password);
+        onLogin(user);
+      }
     } catch {
-      onError("Неверный логин или пароль");
+      onError(mode === "signup" ? "Не удалось создать учётку" : "Неверный логин или пароль");
     } finally {
       setLoading(false);
     }
@@ -49,8 +60,31 @@ export function LoginScreen({
         <h1 className="auth-title">Вход в панель мониторинга</h1>
         <p className="auth-copy">Используй логин и пароль, чтобы открыть дашборд и поток телеметрии.</p>
 
+        <div className="auth-toolbar" style={{ justifyContent: "flex-start" }}>
+          <button
+            className="btn auth-theme-btn"
+            type="button"
+            onClick={() => {
+              setMode("login");
+              onError(null);
+            }}
+          >
+            Вход
+          </button>
+          <button
+            className="btn auth-theme-btn"
+            type="button"
+            onClick={() => {
+              setMode("signup");
+              onError(null);
+            }}
+          >
+            Создать учётку
+          </button>
+        </div>
+
         <label className="auth-label" htmlFor="username">
-          Логин
+          Email
         </label>
         <input
           id="username"
@@ -75,10 +109,10 @@ export function LoginScreen({
         {error ? <div className="auth-error">{error}</div> : null}
 
         <button className="auth-submit" type="submit" disabled={loading}>
-          {loading ? "Входим…" : "Войти"}
+          {loading ? "Подождите…" : mode === "signup" ? "Создать учётку" : "Войти"}
         </button>
 
-        <div className="auth-hint">По умолчанию: admin / admin123</div>
+        <div className="auth-hint">Вход и регистрация через Supabase Auth (email + password).</div>
       </form>
     </div>
   );

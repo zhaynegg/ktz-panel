@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     supabase_url: str = ""
     supabase_anon_key: str = ""
     supabase_service_role_key: str = ""
+    supabase_auth_enabled: bool = False
     database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/kzt"
 
     # --- Auth ---

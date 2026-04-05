@@ -112,10 +112,20 @@ Retention по умолчанию: `72 часа`.
 
 - `CORS_ORIGINS`
 - `AUTH_USERNAME`, `AUTH_PASSWORD`
+- `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_AUTH_ENABLED`
+- `DATABASE_URL` (можно указать Supabase Postgres / pooler URL)
 - `HEALTH_CONFIG_PATH`
 - `TELEMETRY_HISTORY_DB_PATH`
 - `TELEMETRY_HISTORY_RETENTION_HOURS`
 - `OPENAI_API_KEY`
+
+Для включения входа через Supabase Auth:
+
+- в `backend/.env` задать `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_AUTH_ENABLED=true`
+- во `frontend/.env` задать `NEXT_PUBLIC_SUPABASE_AUTH_ENABLED=true`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- использовать email/пароль пользователя Supabase в форме логина (формируется JWT access token)
+- backend проверяет JWT для защищённых REST и WebSocket endpoint'ов
+- при `SUPABASE_AUTH_ENABLED=false` используется локальный логин (`AUTH_USERNAME`/`AUTH_PASSWORD`)
 
 ## Демо-сценарий
 
