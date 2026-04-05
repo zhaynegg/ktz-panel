@@ -41,10 +41,11 @@ def _user_payload() -> dict[str, str]:
 
 def _supabase_auth_enabled() -> bool:
     settings = get_settings()
+    # Railway/hosted deployments may omit SUPABASE_AUTH_ENABLED and sometimes
+    # omit anon key in backend env. JWT verification via JWKS needs only URL.
     return bool(
-        settings.supabase_auth_enabled
-        and settings.supabase_url.strip()
-        and settings.supabase_anon_key.strip()
+        settings.supabase_url.strip()
+        and (settings.supabase_auth_enabled or settings.auth_enabled)
     )
 
 

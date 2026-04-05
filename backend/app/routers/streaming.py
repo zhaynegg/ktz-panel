@@ -28,7 +28,8 @@ async def telemetry_ws(ws: WebSocket) -> None:
     """
     try:
         get_current_user_from_websocket(ws)
-    except Exception:
+    except Exception as exc:
+        logger.warning("WebSocket auth rejected: %s", exc)
         await ws.close(code=1008)
         return
 

@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/kzt"
 
     # --- Auth ---
+    
     auth_enabled: bool = True
     auth_username: str = "admin"
     auth_password: str = "admin123"
