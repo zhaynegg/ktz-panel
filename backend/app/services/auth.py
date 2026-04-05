@@ -148,14 +148,44 @@ def _decode_supabase_access_token(token: str) -> dict[str, Any] | None:
 
 def _supabase_user_from_token(token: str) -> dict[str, str] | None:
     claims = _decode_supabase_access_token(token)
-    if not claims:
+    if claims:
+        user_email = claims.get("email")
+        if isinstance(user_email, str) and user_email:
+            return {"username": user_email}
+
+        user_sub = claims.get("sub")
+        if isinstance(user_sub, str) and user_sub:
+            return {"username": user_sub}
+
+    # Fallback: validate token against Supabase Auth API directly.
+    settings = get_settings()
+    base_url = settings.supabase_url.strip().rstrip("/")
+    anon_key = settings.supabase_anon_key.strip()
+    if not base_url or not anon_key:
         return None
 
-    user_email = claims.get("email")
+    req = urllib_request.Request(
+        f"{base_url}/auth/v1/user",
+        method="GET",
+        headers={
+            "apikey": anon_key,
+            "Authorization": f"Bearer {token}",
+        },
+    )
+    try:
+        with urllib_request.urlopen(req, timeout=8) as response:
+            data = json.loads(response.read().decode("utf-8"))
+    except (urllib_error.URLError, urllib_error.HTTPError, TimeoutError, json.JSONDecodeError):
+        return None
+
+    if not isinstance(data, dict):
+        return None
+
+    user_email = data.get("email")
     if isinstance(user_email, str) and user_email:
         return {"username": user_email}
 
-    user_sub = claims.get("sub")
+    user_sub = data.get("id") or data.get("sub")
     if isinstance(user_sub, str) and user_sub:
         return {"username": user_sub}
 
