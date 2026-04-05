@@ -3,11 +3,11 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Сначала копируем конфиги для кэширования слоев
-COPY package.json package-lock.json ./
+COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci
 
 # Копируем остальной код
-COPY . .
+COPY frontend/. .
 
 ENV NODE_ENV=production
 EXPOSE 3000
